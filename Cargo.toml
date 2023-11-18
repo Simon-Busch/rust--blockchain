@@ -8,3 +8,4 @@ edition = "2021"
 [dependencies]
 sha2 = "0.9.5"
 secp256k1 = "0.20.1"
+rand = "0.8.4"

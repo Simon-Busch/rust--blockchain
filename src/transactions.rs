@@ -1,17 +1,18 @@
 use secp256k1::{Message, PublicKey, Secp256k1, SecretKey, Signature};
 use std::str::FromStr;
+use crate::wallet::Wallet;
 
 #[derive(Debug)]
 pub struct Transaction {
-    pub sender: String,
-    pub recipient: String,
+    pub sender: Wallet,
+    pub recipient: Wallet,
     pub amount: f32,
     pub signature: String,
 }
 
 impl Transaction {
 
-    pub fn new(sender: String, recipient: String, amount: f32) -> Self {
+    pub fn new(sender: Wallet, recipient: Wallet, amount: f32) -> Self {
         Self {
             sender,
             recipient,
@@ -31,8 +32,8 @@ impl Transaction {
 
     pub fn create_message(&self) -> Vec<u8> {
         let mut bytes = Vec::new();
-        bytes.extend(self.sender.as_bytes());
-        bytes.extend(self.recipient.as_bytes());
+        bytes.extend(self.sender.public_key.as_bytes());
+        bytes.extend(self.recipient.public_key.as_bytes());
         bytes.extend(&self.amount.to_le_bytes());
         bytes
     }

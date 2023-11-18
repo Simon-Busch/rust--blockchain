@@ -1,4 +1,6 @@
-use crate::{block::Block, transactions::Transaction};
+use std::time::{SystemTime, UNIX_EPOCH};
+
+use crate::{block::Block, transactions::Transaction, wallet};
 use sha2::{Digest, Sha256};
 
 #[derive(Debug)]
@@ -9,10 +11,8 @@ pub struct Blockchain {
 // Implementing the Blockchain
 impl Blockchain {
     pub fn new() -> Self {
-        let genesis_transaction = Transaction::new("Genesis".to_owned(), "Genesis".to_owned(), 0.0);
-        let genesis_block = Block::new(0, vec![genesis_transaction], String::new(), 0);
+        let genesis_block = Block::new(Self::current_timestamp(), vec![], String::new(), 0);
         let chain = vec![genesis_block];
-
         Self { chain }
     }
 
@@ -31,6 +31,10 @@ impl Blockchain {
 
     pub fn current_timestamp() -> i64 {
         //   placeholder value
-        1_617_439_785
+        // get current timestamp
+        SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .unwrap()
+            .as_secs() as i64
     }
 }
