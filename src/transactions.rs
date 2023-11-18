@@ -32,8 +32,8 @@ impl Transaction {
 
     pub fn create_message(&self) -> Vec<u8> {
         let mut bytes = Vec::new();
-        bytes.extend(self.sender.public_key.as_bytes());
-        bytes.extend(self.recipient.public_key.as_bytes());
+        bytes.extend(self.sender.public_key.serialize());
+        bytes.extend(self.recipient.public_key.serialize());
         bytes.extend(&self.amount.to_le_bytes());
         bytes
     }

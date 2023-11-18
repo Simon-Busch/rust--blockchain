@@ -1,7 +1,6 @@
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use crate::{block::Block, transactions::Transaction, wallet};
-use sha2::{Digest, Sha256};
+use crate::{block::Block, transactions::Transaction};
 
 #[derive(Debug)]
 pub struct Blockchain {
