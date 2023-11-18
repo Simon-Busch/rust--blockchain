@@ -2,16 +2,16 @@ use sha2::{Digest, Sha256};
 use std::fmt::Write;
 
 #[derive(Debug)]
-struct Block {
-    timestamp: i64,
-    data: String,
-    previous_hash: String,
-    hash: String,
+pub struct Block {
+    pub timestamp: i64,
+    pub data: String,
+    pub previous_hash: String,
+    pub hash: String,
 }
 
 // Implemntation of the block
 impl Block {
-  fn new(timestamp: i64, data: String, previous_hash: String) -> Self {
+  pub fn new(timestamp: i64, data: String, previous_hash: String) -> Self {
     let mut block = Self {
       timestamp,
       data,
@@ -33,9 +33,5 @@ impl Block {
             write!(&mut hash_str, "{:02x}", byte).expect("Unable to write");
         }
         hash_str
-  }
-
-  pub fn hello() {
-    println!("Hello, world! 2");
   }
 }
