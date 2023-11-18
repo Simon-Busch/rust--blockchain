@@ -1,23 +1,34 @@
-use crate::block::Block;
-
+use crate::{block::Block, transactions::Transaction};
+use sha2::{Digest, Sha256};
 
 #[derive(Debug)]
 pub struct Blockchain {
     pub chain: Vec<Block>,
 }
+
 // Implementing the Blockchain
 impl Blockchain {
     pub fn new() -> Self {
-        let genesis_block = Block::new(0, "Genesis Block".to_owned(), String::new());
-        Blockchain {
-            chain: vec![genesis_block],
-        }
+        let genesis_transaction = Transaction::new("Genesis".to_owned(), "Genesis".to_owned(), 0.0);
+        let genesis_block = Block::new(0, vec![genesis_transaction], String::new(), 0);
+        let chain = vec![genesis_block];
+
+        Self { chain }
     }
-    pub fn add_block(&mut self, data: String) {
+
+    pub fn add_block(&mut self, data: Vec<Transaction>) {
         let previous_hash = self.chain.last().unwrap().hash.clone();
-        let new_block = Block::new(Self::current_timestamp(), data, previous_hash);
+        let previous_proof = self.chain.last().unwrap().proof.clone();
+        let current_proof = Block::mine_block(previous_proof);
+        let new_block = Block::new(
+            Self::current_timestamp(),
+            data,
+            previous_hash,
+            current_proof,
+        );
         self.chain.push(new_block);
     }
+
     pub fn current_timestamp() -> i64 {
         //   placeholder value
         1_617_439_785
