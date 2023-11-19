@@ -4,21 +4,24 @@ use sha2::{Digest, Sha256};
 
 #[derive(Debug)]
 pub struct Transaction {
-    pub sender: Wallet,
-    pub recipient: Wallet,
-    pub amount: f32,
-    pub signature: Option<Signature>, // Make signature an Option<Signature>
+  pub sender: Wallet,
+  pub recipient: Wallet,
+  pub amount: f32,
+  pub signature: Option<Signature>,
+  pub message: Option<Vec<u8>>,
 }
 
 impl Transaction {
-    pub fn new(sender: Wallet, recipient: Wallet, amount: f32) -> Self {
-        Self {
-            sender,
-            recipient,
-            amount,
-            signature: None, // Initialize signature as None
-        }
-    }
+  pub fn new(sender: Wallet, recipient: Wallet, amount: f32, message: Option<&str>) -> Self {
+      let message_bytes = message.map(|msg| msg.as_bytes().to_vec());
+      Self {
+          sender,
+          recipient,
+          amount,
+          signature: None,
+          message: message_bytes,
+      }
+  }
 
     pub fn sign(&mut self, secret_key: &SecretKey) {
         let context = Secp256k1::new();
@@ -70,4 +73,15 @@ impl Transaction {
         hash.copy_from_slice(&result);
         hash
     }
+
+    pub fn decode_message(&self) -> Option<String> {
+      if let Some(msg_bytes) = &self.message {
+          // Attempt to convert the message bytes into a UTF-8 string
+          if let Ok(msg_str) = std::str::from_utf8(msg_bytes) {
+              return Some(msg_str.to_string());
+          }
+      }
+      None
+  }
+
 }
