@@ -1,6 +1,6 @@
-use secp256k1::{PublicKey, Secp256k1, SecretKey};
 use rand::rngs::OsRng;
 use rand::RngCore;
+use secp256k1::{PublicKey, Secp256k1, SecretKey};
 
 #[derive(Debug, Clone, Copy)]
 pub struct Wallet {
@@ -17,7 +17,7 @@ impl Wallet {
         }
     }
 
-    pub fn generate_keypair() -> (SecretKey, PublicKey) {
+    fn generate_keypair() -> (SecretKey, PublicKey) {
         let secp = Secp256k1::new();
         let mut rng = OsRng;
 

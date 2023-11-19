@@ -12,6 +12,8 @@ fn main() {
     oxsi_coin.add_block(vec![{
         let mut transaction = transactions::Transaction::new(alice_wallet, bob_wallet, 10.0);
         transaction.sign(&alice_wallet.secret_key);
+        let ok_transac = transaction.verify_transaction(&transaction, &transaction.signature.unwrap(), &alice_wallet.public_key);
+        println!("Transaction verified: {}", ok_transac);
         transaction
     }]);
     for _ in 0..10 {
@@ -20,6 +22,8 @@ fn main() {
             let bob_wallet = wallet::Wallet::new();
             let mut transaction = transactions::Transaction::new(alice_wallet, bob_wallet, 10.0);
             transaction.sign(&alice_wallet.secret_key);
+            let ok_transac = transaction.verify_transaction(&transaction, &transaction.signature.unwrap(), &alice_wallet.public_key);
+            println!("Transaction verified: {}", ok_transac);
             transaction
         }]);
     }
