@@ -8,18 +8,18 @@ pub struct Transaction {
   pub recipient: Wallet,
   pub amount: f32,
   pub signature: Option<Signature>,
-  pub message: Option<Vec<u8>>,
+  pub data: Option<Vec<u8>>,
 }
 
 impl Transaction {
-  pub fn new(sender: Wallet, recipient: Wallet, amount: f32, message: Option<&str>) -> Self {
-      let message_bytes = message.map(|msg| msg.as_bytes().to_vec());
+  pub fn new(sender: Wallet, recipient: Wallet, amount: f32, data: Option<&str>) -> Self {
+      let message_bytes = data.map(|msg| msg.as_bytes().to_vec());
       Self {
           sender,
           recipient,
           amount,
           signature: None,
-          message: message_bytes,
+          data: message_bytes,
       }
   }
 
@@ -75,7 +75,7 @@ impl Transaction {
     }
 
     pub fn decode_message(&self) -> Option<String> {
-      if let Some(msg_bytes) = &self.message {
+      if let Some(msg_bytes) = &self.data {
           // Attempt to convert the message bytes into a UTF-8 string
           if let Ok(msg_str) = std::str::from_utf8(msg_bytes) {
               return Some(msg_str.to_string());

@@ -29,13 +29,13 @@ fn main() {
         let alice_wallet = wallet::Wallet::new();
         let bob_wallet = wallet::Wallet::new();
         let amount: f32 = rng.gen_range(1.0..100.0);
-        let message = Some(format!("I sent you: {}", amount));
+        let data = Some(format!("I sent you: {}", amount));
 
         let mut transaction = transactions::Transaction::new(
             alice_wallet,
             bob_wallet,
             amount,
-            message.as_deref(),
+            data.as_deref(),
         );
         transaction.sign(&alice_wallet.secret_key);
         let ok_transac = transaction.verify_transaction(
